@@ -5,4 +5,4 @@ const MainRoutes = () => {
   return <div>Main Route</div>;
 };
 
-export default Routes;
+export default MainRoutes;

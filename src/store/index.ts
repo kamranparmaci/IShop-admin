@@ -2,16 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import authReducer from './slices/auth';
-import {
-  persistStore,
-  persistCombineReducers,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
+import { persistCombineReducers } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 const persistConfig = {
@@ -28,7 +19,11 @@ const persistedReducer = persistCombineReducers(persistConfig, {
 const store = configureStore({
   reducer: persistedReducer,
   middleware(getDefaultMiddleware) {
-    return getDefaultMiddleware();
+    return getDefaultMiddleware({
+      serializableCheck: {
+        ignoreActions: false,
+      },
+    });
   },
   devTools: process.env.NODE_ENV !== 'production',
 });

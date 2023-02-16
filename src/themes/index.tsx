@@ -1,8 +1,10 @@
 import React, { useMemo, ReactNode, FC } from 'react';
-import { ThemeProvider } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
-import { useAppSelector } from '../store';
+
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
 import { designTokens } from './designTokens';
+import { useAppSelector } from '../features/store';
 
 interface ThemeProps {
   children: ReactNode;
@@ -10,13 +12,15 @@ interface ThemeProps {
 
 const Themes: FC<ThemeProps> = ({ children }) => {
   const mode = useAppSelector((state) => state.auth.mode);
-  const theme = useMemo(() => designTokens(mode), [mode]);
+  const theme = createTheme(useMemo(() => designTokens(mode), [mode]));
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {children}
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
 

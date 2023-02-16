@@ -1,6 +1,5 @@
-import { Action, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthState } from '../../types/auth';
-import { SetModeAction } from '../../types/root';
 
 const initialState: AuthState = {
   user: null,

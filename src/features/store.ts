@@ -1,9 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import authReducer from './slices/auth';
-import { persistCombineReducers } from 'redux-persist';
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistCombineReducers,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { authApi } from './apis/auth';
+import baseApi from './apis';
 
 const persistConfig = {
   key: 'root',
@@ -14,6 +24,7 @@ const persistConfig = {
 
 const persistedReducer = persistCombineReducers(persistConfig, {
   auth: authReducer,
+  [baseApi.reducerPath]: baseApi.reducer,
 });
 
 const store = configureStore({
@@ -21,9 +32,9 @@ const store = configureStore({
   middleware(getDefaultMiddleware) {
     return getDefaultMiddleware({
       serializableCheck: {
-        ignoreActions: false,
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    });
+    }).concat(baseApi.middleware);
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
@@ -34,12 +45,8 @@ export type AppDispatch = typeof store.dispatch;
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
-export const useAppSelector = <TSelected>(
-  selector: (state: RootState) => TSelected
-) => {
-  return useSelector(selector);
-};
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-setupListeners(store.dispatch as AppDispatch);
+setupListeners(store.dispatch);
 
 export default store;

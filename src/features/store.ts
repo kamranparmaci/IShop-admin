@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import authReducer from './slices/auth';
+import customizationReducer from './slices/customization';
 import {
   FLUSH,
   PAUSE,
@@ -12,18 +13,18 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { authApi } from './apis/auth';
 import baseApi from './apis';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'],
+  whitelist: ['auth', 'customization'],
   version: 1,
 };
 
 const persistedReducer = persistCombineReducers(persistConfig, {
   auth: authReducer,
+  customization: customizationReducer,
   [baseApi.reducerPath]: baseApi.reducer,
 });
 

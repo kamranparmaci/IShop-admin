@@ -7,3 +7,7 @@ export interface CheckAuth {
 export interface ChildrenProps {
   children: ReactNode;
 }
+
+export interface ColorProps {
+  readonly [key: string]: string;
+}

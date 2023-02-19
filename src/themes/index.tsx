@@ -1,22 +1,51 @@
-import React, { useMemo, ReactNode, FC } from 'react';
-import { ThemeProvider } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
-import { useAppSelector } from '../store';
-import { designTokens } from './designTokens';
+import React, { useMemo, FC } from 'react';
 
-interface ThemeProps {
-  children: ReactNode;
-}
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
+import {
+  ThemeProvider,
+  createTheme,
+  Theme,
+  ThemeOptions,
+} from '@mui/material/styles';
 
-const Themes: FC<ThemeProps> = ({ children }) => {
-  const mode = useAppSelector((state) => state.auth.mode);
-  const theme = useMemo(() => designTokens(mode), [mode]);
+import { useAppSelector } from '../features/store';
+import Palette from './palette';
+import { ChildrenProps } from '../types/root';
+import { TypographyOptions } from '@mui/material/styles/createTypography';
+import Typography from './typography';
+import '../../public/fonts/fonts.css';
+
+const Themes: FC<ChildrenProps> = ({ children }) => {
+  const { mode } = useAppSelector((state) => state.auth);
+  const { colorTheme, fonts } = useAppSelector((state) => state.customization);
+
+  const theme = useMemo<Theme>(
+    () => Palette(mode, colorTheme),
+    [mode, colorTheme]
+  );
+
+  const typography: TypographyOptions = useMemo<TypographyOptions>(
+    () => Typography(fonts),
+    [fonts]
+  );
+
+  const themeOptions: ThemeOptions = useMemo(
+    () => ({
+      palette: theme.palette,
+      typography,
+    }),
+    [theme, typography]
+  );
+
+  const themes = createTheme(themeOptions);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {children}
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={themes}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
 

@@ -1,7 +1,13 @@
 import React from 'react';
+import AllRoutes from './routes';
+import Themes from './themes';
 
 const App = () => {
-  return <div>App</div>;
+  return (
+    <Themes>
+      <AllRoutes />
+    </Themes>
+  );
 };
 
 export default App;

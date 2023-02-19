@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { Box } from '@mui/material';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
@@ -16,6 +16,7 @@ import ModeSection from './mode-section';
 import PresetColorsSection from './colors-section';
 import FontsSection from './fonts-section';
 import LayoutsSection from './layouts-section';
+import { ChildrenProps } from '../../types/root';
 
 const drawerWidth = 400;
 
@@ -88,7 +89,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer() {
+const CustomizationSection: FC<ChildrenProps> = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -159,7 +160,10 @@ export default function MiniDrawer() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
+        {children}
       </Box>
     </Box>
   );
-}
+};
+
+export default CustomizationSection;

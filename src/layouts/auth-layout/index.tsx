@@ -1,5 +1,5 @@
-import { Container } from '@mui/material';
 import React, { FC } from 'react';
+import { Container } from '@mui/material';
 import { ChildrenProps } from '../../types/root';
 import CustomizationSection from '../../UIs/customization';
 

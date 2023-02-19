@@ -9,7 +9,15 @@ export const authApi = baseApi.injectEndpoints({
     checkSuperadminExists: build.query<CheckSuperadmin, void>({
       query: () => '/superadmin/exists',
     }),
+    registerSuperadmin: build.mutation({
+      query: (body) => ({
+        url: '/superadmin/register',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useCheckSuperadminExistsQuery } = authApi;
+export const { useCheckSuperadminExistsQuery, useRegisterSuperadminMutation } =
+  authApi;
